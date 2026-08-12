@@ -3,23 +3,410 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>LifeSync AI</title>
-  <link rel="stylesheet" href="style.css">
+  <title>LifeSync AI | The platform to achieve</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:ital,wght@1,500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  
+  <!-- GSAP & Lenis for Smooth Scrolling and Animations -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.27/bundled/lenis.min.js"></script>
 </head>
 <body>
+  <!-- Custom Cursor Elements -->
+  <div class="noise-overlay"></div>
 
-  <div class="container">
-    <h1> LifeSync AI</h1>
-    <p>Your AI-powered life planner</p>
+  <!-- Grid Background (Hero Section Only) -->
+  <div class="grid-background" id="interactive-grid" style="position: absolute;"></div>
 
-    <textarea id="goalInput"
-      placeholder="Enter your goal here..."></textarea>
+  <!-- Navbar -->
+  <nav class="navbar" id="navbar">
+    <div class="nav-container">
+      <div class="logo" onclick="window.location.href='index.html'" style="cursor: pointer;" title="Back to Home"><img src="assets/logo.png" alt="LifeSync AI" style="max-height: 40px; display: block;"></div>
+      <div class="nav-links">
+        <a href="#features" data-magnetic>Features</a>
+        <a href="#how-it-works" data-magnetic>How it works</a>
+        <a href="#ecosystem" data-magnetic>Ecosystem</a>
+      </div>
+      <div class="nav-actions">
+        <a href="login.html" class="nav-link-subtle" data-magnetic>Sign in</a>
+        <a href="register.html" class="btn btn-primary" data-magnetic>Start creating</a>
+      </div>
+    </div>
+  </nav>
 
-    <button onclick="generatePlan()">Generate Smart Plan</button>
+  <!-- Hero Section -->
+  <section class="hero" id="home">
+    <div class="hero-container">
+      <div class="hero-content">
+        <div class="overline">
+          <span class="line"></span>
+          <span class="text">The platform for modern achievers</span>
+        </div>
+        
+        <h1 class="split-text">The planner<br>to <span class="serif-italic">achieve</span></h1>
+        
+        <p class="subheadline">
+          Your toolkit to stop procrastinating and start doing.<br>
+          Securely plan, track, and scale the best habits.
+        </p>
+        
+        <div class="hero-buttons">
+          <a href="register.html" class="btn btn-primary btn-large" data-magnetic>Start free trial &rarr;</a>
+          <a href="#demo" class="btn btn-outline btn-large" data-magnetic>Watch demo</a>
+        </div>
+      </div>
+      
+      <div class="hero-visual">
+        <!-- Abstract CSS Graphic representing the dot sphere -->
+        <div class="abstract-sphere" id="sphere"></div>
+      </div>
+    </div>
 
-    <div id="output" class="output-box"></div>
-  </div>
+    <!-- Stats Bar (Integrated into Hero Bottom) -->
+    <div class="hero-stats">
+      <div class="stat-item">
+        <h3>3.8+</h3>
+        <div class="stat-info">
+          <span class="stat-desc">average GPA increase</span>
+          <span class="stat-brand">LIFESYNC</span>
+        </div>
+      </div>
+      <div class="stat-item">
+        <h3>300%</h3>
+        <div class="stat-info">
+          <span class="stat-desc">focus time increase</span>
+          <span class="stat-brand">POMODORO</span>
+        </div>
+      </div>
+      <div class="stat-item">
+        <h3>100%</h3>
+        <div class="stat-info">
+          <span class="stat-desc">deadlines met</span>
+          <span class="stat-brand">AI PLANNER</span>
+        </div>
+      </div>
+      <div class="stat-item">
+        <h3>20 hrs</h3>
+        <div class="stat-info">
+          <span class="stat-desc">saved on planning</span>
+          <span class="stat-brand">MONTHLY</span>
+        </div>
+      </div>
+    </div>
+  </section>
 
-  <script src="script.js"></script>
+  <!-- We will keep the rest of the sections but stylize them slightly to match the B&W theme in CSS -->
+  <section class="features" id="features">
+    <div class="section-header reveal">
+      <h2>Everything you need to stay productive</h2>
+      <p>Powerful tools designed to work together, so you can focus on what matters.</p>
+    </div>
+    
+    <div class="features-grid">
+      
+      <!-- Card 1: Study Planner -->
+      <div class="feature-card card-study reveal">
+        <div class="card-header">
+          <h3>Study<br>Planner</h3>
+          <span class="card-link">lifesync.ai</span>
+        </div>
+        <div class="card-visual">
+          <div class="shape-study"></div>
+        </div>
+        <div class="card-footer">
+          <p>AI organizes study blocks around your schedule to maximize retention.</p>
+          <span class="card-logo">LIFESYNC</span>
+        </div>
+      </div>
+      
+      <!-- Card 2: Focus Timer -->
+      <div class="feature-card card-focus reveal" style="transition-delay: 100ms;">
+        <div class="card-header">
+          <h3>Focus<br>Timer</h3>
+          <span class="card-link">lifesync.ai</span>
+        </div>
+        <div class="card-visual">
+          <div class="shape-focus"></div>
+        </div>
+        <div class="card-footer">
+          <p>Pomodoro timer tracks deep work sessions and prevents burnout.</p>
+          <span class="card-logo">LIFESYNC</span>
+        </div>
+      </div>
+      
+      <!-- Card 3: Habit Builder -->
+      <div class="feature-card card-habit reveal" style="transition-delay: 200ms;">
+        <div class="card-header">
+          <h3>Habit<br>Builder</h3>
+          <span class="card-link">lifesync.ai</span>
+        </div>
+        <div class="card-visual">
+          <div class="shape-habit"></div>
+        </div>
+        <div class="card-footer">
+          <p>Build routines with streak counters and gamified consistency tracking.</p>
+          <span class="card-logo">LIFESYNC</span>
+        </div>
+      </div>
+      
+      <!-- Card 4: AI Coach -->
+      <div class="feature-card card-coach reveal" style="transition-delay: 300ms;">
+        <div class="card-header">
+          <h3>AI<br>Coach</h3>
+          <span class="card-link">lifesync.ai</span>
+        </div>
+        <div class="card-visual">
+          <div class="shape-coach"></div>
+        </div>
+        <div class="card-footer">
+          <p>Intelligent nudges and stress-management suggestions based on data.</p>
+          <span class="card-logo">LIFESYNC</span>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- How It Works Section -->
+  <section class="how-it-works" id="how-it-works">
+    <div class="section-header reveal">
+      <h2>How it works</h2>
+      <p>A simple, systematic approach to reclaiming your time.</p>
+    </div>
+
+    <div class="steps-grid">
+      
+      <!-- Step 1 -->
+      <div class="step-card card-step1 reveal">
+        <div class="inner-card">
+          <!-- Front -->
+          <div class="card-front">
+            <div class="step-watermark">1</div>
+            <div class="card-header">
+              <h3>Input<br>your life</h3>
+              <span class="card-link">STEP 01</span>
+            </div>
+            <div class="card-visual">
+              <div class="shape-step1"></div>
+            </div>
+            <div class="card-footer">
+              <span>Hover for details</span>
+              <span class="card-logo">LIFESYNC</span>
+            </div>
+          </div>
+          <!-- Back -->
+          <div class="card-back">
+            <div class="card-back-content">
+              <h3>01. Input</h3>
+              <p>Add your wake-up time, college schedule, and upcoming exams. LifeSync acts as your central brain, analyzing your unique routine to find hidden pockets of time.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Arrow 1 -->
+      <div class="step-arrow reveal" style="transition-delay: 50ms;">
+        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </div>
+      
+      <!-- Step 2 -->
+      <div class="step-card card-step2 reveal" style="transition-delay: 150ms;">
+        <div class="inner-card">
+          <div class="card-front">
+            <div class="step-watermark">2</div>
+            <div class="card-header">
+              <h3>AI generates<br>your day</h3>
+              <span class="card-link">STEP 02</span>
+            </div>
+            <div class="card-visual">
+              <div class="shape-step2"></div>
+            </div>
+            <div class="card-footer">
+              <span>Hover for details</span>
+              <span class="card-logo">LIFESYNC</span>
+            </div>
+          </div>
+          <div class="card-back">
+            <div class="card-back-content">
+              <h3>02. Generate</h3>
+              <p>Our intelligent engine instantly generates a perfect hourly Daily Plan. It balances study sessions, habits, and rest periods to prevent burnout.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Arrow 2 -->
+      <div class="step-arrow reveal" style="transition-delay: 200ms;">
+        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </div>
+      
+      <!-- Step 3 -->
+      <div class="step-card card-step3 reveal" style="transition-delay: 300ms;">
+        <div class="inner-card">
+          <div class="card-front">
+            <div class="step-watermark">3</div>
+            <div class="card-header">
+              <h3>Execute<br>flawlessly</h3>
+              <span class="card-link">STEP 03</span>
+            </div>
+            <div class="card-visual">
+              <div class="shape-step3"></div>
+            </div>
+            <div class="card-footer">
+              <span>Hover for details</span>
+              <span class="card-logo">LIFESYNC</span>
+            </div>
+          </div>
+          <div class="card-back">
+            <div class="card-back-content">
+              <h3>03. Execute</h3>
+              <p>Follow your dynamic plan. Use the built-in Focus Timer to track your deep work and maintain visual streak counters for your habits.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Ecosystem Section -->
+  <section class="ecosystem" id="ecosystem">
+    <div class="section-header reveal">
+      <h2>What we give you</h2>
+      <p>Everything you need for a balanced student life, unified in one platform.</p>
+    </div>
+
+    <div class="bento-grid reveal">
+      
+      <!-- GitHub Heatmap (Large) -->
+      <div class="bento-item bento-large">
+        <div class="bento-content">
+          <h3>Habit Heatmap</h3>
+          <p>Visualize your consistency and maintain your streaks, inspired by GitHub contributions.</p>
+        </div>
+        <div class="bento-visual heatmap-visual">
+          <script>
+            // Generate some random heatmap cells
+            for(let i=0; i<150; i++) {
+              let activeClass = '';
+              let rand = Math.random();
+              if(rand > 0.8) activeClass = 'active-4';
+              else if(rand > 0.6) activeClass = 'active-3';
+              else if(rand > 0.4) activeClass = 'active-2';
+              else if(rand > 0.2) activeClass = 'active-1';
+              document.write('<div class="heatmap-cell ' + activeClass + '"></div>');
+            }
+          </script>
+        </div>
+      </div>
+
+      <!-- Mood Tracking (Small) -->
+      <div class="bento-item">
+        <div class="bento-content">
+          <h3>Mood Tracking</h3>
+          <p>Correlate your academic performance with well-being.</p>
+        </div>
+        <div class="bento-visual emoji-visual">
+          🧠
+        </div>
+      </div>
+
+      <!-- Smart Notes (Small) -->
+      <div class="bento-item">
+        <div class="bento-content">
+          <h3>Smart Notes</h3>
+          <p>Rich-text sticky notes with beautiful paper textures.</p>
+        </div>
+        <div class="bento-visual">
+          <div class="notes-visual">
+            <div class="note-line"></div>
+            <div class="note-line"></div>
+            <div class="note-line" style="width: 60%"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Screen Time (Medium) -->
+      <div class="bento-item bento-wide">
+        <div class="bento-content">
+          <h3>Screen Time</h3>
+          <p>Advanced analytics and application blocking to keep your focus intact during deep work sessions.</p>
+        </div>
+        <div class="bento-visual chart-visual">
+          <div class="chart-bar" style="height: 40%"></div>
+          <div class="chart-bar" style="height: 70%"></div>
+          <div class="chart-bar" style="height: 50%"></div>
+          <div class="chart-bar" style="height: 100%; background: #059669"></div>
+          <div class="chart-bar" style="height: 30%"></div>
+          <div class="chart-bar" style="height: 60%"></div>
+          <div class="chart-bar" style="height: 80%"></div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+
+
+  <!-- CTA Section -->
+  <section class="cta-section reveal">
+    <div class="cta-container">
+      <h2>Ready to build?</h2>
+      <p>Join thousands of modern achievers optimizing their lives today.</p>
+      <div class="cta-buttons">
+        <a href="#start" class="btn btn-primary btn-large">Start creating</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-container">
+      <div class="footer-brand">
+        <div class="logo" onclick="window.location.href='index.html'" style="cursor: pointer;" title="Back to Home"><img src="assets/logo.png" alt="LifeSync AI" style="max-height: 40px; display: block;"></div>
+        <p class="footer-tagline">The platform to achieve.</p>
+      </div>
+      
+      <div class="footer-links">
+        <div class="footer-col">
+          <h4>Product</h4>
+          <a href="#">Features</a>
+          <a href="#">Integrations</a>
+          <a href="#">Pricing</a>
+          <a href="#">Changelog</a>
+        </div>
+        <div class="footer-col">
+          <h4>Company</h4>
+          <a href="#">About</a>
+          <a href="#">Careers</a>
+          <a href="#">Blog</a>
+          <a href="#">Contact</a>
+        </div>
+        <div class="footer-col">
+          <h4>Legal</h4>
+          <a href="#">Privacy Policy</a>
+          <a href="#">Terms of Service</a>
+          <a href="#">Security</a>
+        </div>
+      </div>
+    </div>
+    
+    <div class="footer-bottom">
+      <p>&copy; 2026 LifeSync AI. All rights reserved.</p>
+      <div class="social-links">
+        <a href="#">Twitter</a>
+        <a href="#">GitHub</a>
+        <a href="#">LinkedIn</a>
+      </div>
+    </div>
+  </footer>
+
+  <script type="module" src="js/script.js"></script>
 </body>
 </html>
+
+
+

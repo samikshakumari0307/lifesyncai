@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Coach | LifeSync AI</title>
+  <link rel="stylesheet" href="../css/global.css">
+  <link rel="stylesheet" href="../css/components.css">
+  <link rel="stylesheet" href="../css/dashboard.css">
+  <link rel="stylesheet" href="../css/pages.css">
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.27/bundled/lenis.min.js"></script>
+
+  <style>
+    .chat-container {
+      display: flex;
+      flex-direction: column;
+      height: calc(100vh - 160px);
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+    }
+    .chat-messages {
+      flex: 1;
+      overflow-y: auto;
+      padding: 2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+    .message {
+      max-width: 80%;
+      padding: 1rem 1.5rem;
+      border-radius: 1rem;
+      line-height: 1.5;
+    }
+    .message.bot {
+      align-self: flex-start;
+      background: var(--bg-tertiary);
+      border-bottom-left-radius: 0;
+      color: var(--text-primary);
+    }
+    .message.user {
+      align-self: flex-end;
+      background: var(--text-primary);
+      color: var(--bg-primary);
+      border-bottom-right-radius: 0;
+    }
+    .chat-input-area {
+      padding: 1.5rem;
+      border-top: 1px solid var(--border-color);
+      display: flex;
+      gap: 1rem;
+      background: var(--bg-secondary);
+    }
+    .chat-input {
+      flex: 1;
+      background: var(--bg-tertiary);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-full);
+      padding: 0.8rem 1.5rem;
+      color: var(--text-primary);
+      outline: none;
+      font-size: 1rem;
+    }
+    .chat-input:focus {
+      border-color: var(--accent-primary);
+    }
+    .btn-send {
+      background: var(--accent-primary);
+      color: var(--bg-primary);
+      border: none;
+      border-radius: 50%;
+      width: 48px;
+      height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: opacity 0.2s;
+    }
+    .btn-send:hover {
+      opacity: 0.9;
+    }
+    .typing-indicator {
+      display: none;
+      align-self: flex-start;
+      background: transparent;
+      color: var(--text-tertiary);
+      font-size: 0.9rem;
+      padding: 0 1rem;
+    }
+  </style>
+</head>
+<body>
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <div class="logo" onclick="window.location.href='../index.html'" style="cursor: pointer;" title="Back to Home"><img src="../assets/logo.png" alt="LifeSync AI" style="max-height: 40px; display: block;"></div>
+    </div>
+    <nav class="sidebar-nav">
+      <a href="dashboard.html" class="nav-item">Dashboard</a>
+      <a href="tasks.html" class="nav-item">Tasks</a>
+      <a href="study.html" class="nav-item">Study Planner</a>
+      <a href="habits.html" class="nav-item">Habit Tracker</a>
+      <a href="focus.html" class="nav-item">Focus Timer</a>
+      <div class="nav-divider"></div>
+      <a href="notes.html" class="nav-item">Notes</a>
+      <a href="goals.html" class="nav-item">Goals</a>
+      <a href="mood.html" class="nav-item">Mood Tracker</a>
+      <a href="analytics.html" class="nav-item">Analytics</a>
+      <a href="planner.html" class="nav-item">Daily Planner</a>
+      <a href="ai-coach.html" class="nav-item active">AI Coach</a>
+    </nav>
+    </aside>
+
+  <main class="main-content">
+    <header class="topbar">
+      <div class="page-title">
+        <button id="mobile-menu-btn" class="mobile-menu-btn" aria-label="Menu">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 12h18M3 6h18M3 18h18"></path></svg>
+        </button>
+        <div>
+          <h1>AI Coach</h1>
+          <p class="current-date" id="current-date">Loading date...</p>
+        </div>
+      </div>
+      <div class="topbar-actions">
+                <div class="profile-menu-container" style="position: relative;">
+          <div class="user-avatar" id="user-avatar" style="cursor: pointer;" title="Profile Menu"><span>U</span></div>
+          <div class="profile-dropdown" id="profile-dropdown" style="display: none; position: absolute; right: 0; top: 110%; background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: var(--radius-md); box-shadow: 0 4px 12px rgba(0,0,0,0.05); padding: 0.5rem; width: 160px; z-index: 1000;">
+            <a href="settings.html" style="display: flex; align-items: center; gap: 0.75rem; padding: 0.65rem; color: var(--text-primary); text-decoration: none; border-radius: var(--radius-sm); font-size: 0.9rem; font-weight: 500;">
+              <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+              Settings
+            </a>
+            <div style="height: 1px; background: var(--border-color); margin: 0.25rem 0;"></div>
+            <button id="logout-btn" style="display: flex; align-items: center; gap: 0.75rem; padding: 0.65rem; color: var(--accent-danger); border: none; background: transparent; width: 100%; text-align: left; cursor: pointer; border-radius: var(--radius-sm); font-size: 0.9rem; font-weight: 500; font-family: inherit;">
+              <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+              Logout
+            </button>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <div class="content-area">
+      <div class="chat-container">
+        <div class="chat-messages" id="chat-messages">
+          <div class="message bot">
+            Hello! I am your LifeSync AI Coach. I'm here to help you stay productive, manage your time, and reach your goals. What are we focusing on today?
+          </div>
+          <div class="typing-indicator" id="typing-indicator">AI Coach is typing...</div>
+        </div>
+        
+        <form class="chat-input-area" id="chat-form">
+          <input type="text" id="chat-input" class="chat-input" placeholder="Ask for advice, productivity tips, or motivation..." required autocomplete="off">
+          <button type="submit" class="btn-send">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+          </button>
+        </form>
+      </div>
+    </div>
+  </main>
+
+  <script type="module" src="../js/auth.js"></script>
+  <script type="module" src="../js/dashboard.js"></script>
+  <script type="module" src="../js/ai-coach.js"></script>
+  <script type="module" src="../js/script.js"></script>
+</body>
+</html>
+
+
+
+

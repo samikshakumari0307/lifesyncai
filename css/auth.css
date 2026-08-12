@@ -1,0 +1,487 @@
+/* ============================================================
+   css/auth.css — LifeSync AI
+   Industry-level: always fits viewport, no page scroll
+   ============================================================ */
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body {
+  height: 100%;
+  overflow: hidden;
+}
+
+body {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* The full sunset image as background */
+  background: url('../assets/auth-bg.jpg') center / cover no-repeat;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ============================================================
+   WRAPPER — centers the card, clips to viewport
+   ============================================================ */
+.auth-wrapper {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+}
+
+/* ============================================================
+   SPLIT CARD
+   Max dimensions so it never overflows viewport
+   ============================================================ */
+.auth-split-card {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  max-width: 960px;
+  max-height: 620px;
+  border-radius: 20px;
+  /* Glass card floating over the image */
+  background: rgba(8, 14, 24, 0.35);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  box-shadow:
+    0 32px 80px rgba(0, 0, 0, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.12);
+  overflow: hidden;
+  position: relative;
+  animation: fadeIn 0.4s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: scale(0.97) translateY(12px); }
+  to   { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+/* Left panel: pure image, no glass — lets you see the raw beauty */
+.auth-image-panel {
+  flex: 0 0 45%;
+  position: relative;
+  background-size: cover;
+  background-position: center;
+  overflow: hidden;
+  /* Subtle warm shimmer overlay to make text readable */
+  border-right: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Dark gradient overlay for text readability */
+.auth-image-panel::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    135deg,
+    rgba(0, 0, 0, 0.35) 0%,
+    rgba(0, 0, 0, 0.15) 100%
+  );
+}
+
+.auth-image-panel h1 {
+  position: absolute;
+  bottom: 2.5rem;
+  left: 2.5rem;
+  z-index: 2;
+  color: #fff;
+  font-size: 2rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  text-shadow: 0 2px 20px rgba(0, 0, 0, 0.5);
+  line-height: 1.2;
+  margin: 0;
+}
+
+.auth-image-panel h1 small {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 400;
+  letter-spacing: 0.1em;
+  opacity: 0.75;
+  margin-bottom: 0.3rem;
+  text-transform: uppercase;
+}
+
+/* Right panel: deep glass over the bg image */
+.auth-form-panel {
+  flex: 1;
+  position: relative;
+  background: rgba(5, 10, 18, 0.55);
+  backdrop-filter: blur(32px);
+  -webkit-backdrop-filter: blur(32px);
+  border-left: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 2.5rem 3rem;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255,255,255,0.1) transparent;
+}
+
+/* ============================================================
+   BACK BUTTON — top-left corner of image panel
+   ============================================================ */
+.floating-back-btn {
+  position: absolute;
+  top: 1.25rem;
+  left: 1.25rem;
+  z-index: 10;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: rgba(255, 255, 255, 0.88);
+  text-decoration: none;
+  font-size: 0.8rem;
+  font-weight: 500;
+  padding: 0.45rem 0.9rem 0.45rem 0.65rem;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  transition: background 0.2s, transform 0.2s;
+}
+.floating-back-btn:hover {
+  background: rgba(0, 0, 0, 0.62);
+  color: #fff;
+  transform: translateX(-2px);
+}
+
+/* ============================================================
+   BRAND
+   ============================================================ */
+.auth-brand {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: 0.02em;
+  margin-bottom: 1.5rem;
+}
+.auth-brand span {
+  background: linear-gradient(90deg, #34d399, #6ee7b7);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ============================================================
+   HEADINGS
+   ============================================================ */
+.auth-form-panel h2 {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: -0.025em;
+  margin-bottom: 0.25rem;
+}
+.auth-subtitle {
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.42);
+  margin-bottom: 1.5rem;
+}
+
+/* ============================================================
+   SOCIAL BUTTONS
+   ============================================================ */
+.auth-social {
+  display: flex;
+  gap: 0.6rem;
+  margin-bottom: 1.25rem;
+}
+.btn-social {
+  flex: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 10px;
+  color: rgba(255, 255, 255, 0.88);
+  padding: 0.6rem 0.9rem;
+  font-size: 0.82rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.18s, border-color 0.18s, transform 0.15s;
+  white-space: nowrap;
+  font-family: inherit;
+}
+.btn-social:hover {
+  background: rgba(255, 255, 255, 0.11);
+  border-color: rgba(255, 255, 255, 0.28);
+  transform: translateY(-1px);
+}
+.btn-social:active { transform: translateY(0); }
+.btn-social.icon-only {
+  flex: 0 0 40px;
+  padding: 0.6rem;
+}
+
+/* ============================================================
+   DIVIDER
+   ============================================================ */
+.auth-divider {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  margin-bottom: 1.25rem;
+  color: rgba(255, 255, 255, 0.28);
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.auth-divider::before, .auth-divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* ============================================================
+   FORM FIELDS
+   ============================================================ */
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.form-group label {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.5);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.form-group input {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 10px;
+  padding: 0.65rem 0.9rem;
+  color: #fff;
+  font-size: 0.875rem;
+  font-family: inherit;
+  outline: none;
+  transition: border-color 0.18s, box-shadow 0.18s, background 0.18s;
+}
+.form-group input::placeholder { color: rgba(255, 255, 255, 0.2); }
+.form-group input:hover {
+  border-color: rgba(255, 255, 255, 0.22);
+  background: rgba(255, 255, 255, 0.07);
+}
+.form-group input:focus {
+  border-color: #34d399;
+  box-shadow: 0 0 0 3px rgba(52, 211, 153, 0.14);
+  background: rgba(255, 255, 255, 0.07);
+}
+
+/* Autofill */
+.form-group input:-webkit-autofill,
+.form-group input:-webkit-autofill:hover,
+.form-group input:-webkit-autofill:focus {
+  -webkit-box-shadow: 0 0 0 40px rgba(8, 14, 22, 0.98) inset !important;
+  -webkit-text-fill-color: #fff !important;
+  border-radius: 10px !important;
+  transition: background-color 5000s ease-in-out 0s;
+}
+
+/* ============================================================
+   TERMS
+   ============================================================ */
+.auth-terms {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.6rem;
+  font-size: 0.78rem;
+  color: rgba(255, 255, 255, 0.4);
+  line-height: 1.5;
+}
+.auth-terms input[type="checkbox"] {
+  -webkit-appearance: none;
+  appearance: none;
+  flex-shrink: 0;
+  width: 16px;
+  height: 16px;
+  border: 1.5px solid rgba(255, 255, 255, 0.28);
+  border-radius: 5px;
+  background: transparent;
+  cursor: pointer;
+  position: relative;
+  margin-top: 2px;
+  transition: background 0.18s, border-color 0.18s;
+}
+.auth-terms input[type="checkbox"]:checked {
+  background: #34d399;
+  border-color: #34d399;
+}
+.auth-terms input[type="checkbox"]:checked::after {
+  content: '';
+  position: absolute;
+  left: 3px; top: 1px;
+  width: 5px; height: 8px;
+  border: 2px solid #fff;
+  border-top: none; border-left: none;
+  transform: rotate(45deg);
+}
+.auth-terms a { color: #34d399; text-decoration: none; }
+.auth-terms a:hover { text-decoration: underline; }
+
+/* ============================================================
+   ERROR
+   ============================================================ */
+.error-message {
+  font-size: 0.8rem;
+  color: #fca5a5;
+  background: rgba(252, 165, 165, 0.07);
+  border: 1px solid rgba(252, 165, 165, 0.2);
+  border-radius: 8px;
+  padding: 0.55rem 0.85rem;
+  display: none;
+  text-align: center;
+}
+.error-message:not(:empty) { display: block; }
+
+/* ============================================================
+   SUBMIT BUTTON
+   ============================================================ */
+.btn-auth-submit {
+  width: 100%;
+  background: linear-gradient(135deg, #34d399 0%, #059669 100%);
+  color: #042912;
+  border: none;
+  border-radius: 10px;
+  padding: 0.78rem 1.5rem;
+  font-size: 0.9rem;
+  font-weight: 700;
+  font-family: inherit;
+  cursor: pointer;
+  box-shadow: 0 4px 16px rgba(52, 211, 153, 0.28);
+  transition: all 0.2s;
+  margin-top: 0.25rem;
+  letter-spacing: 0.01em;
+}
+.btn-auth-submit:hover {
+  background: linear-gradient(135deg, #6ee7b7 0%, #34d399 100%);
+  box-shadow: 0 6px 22px rgba(52, 211, 153, 0.4);
+  transform: translateY(-1px);
+}
+.btn-auth-submit:active { transform: translateY(0); }
+.btn-auth-submit:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+/* ============================================================
+   BOTTOM LINK
+   ============================================================ */
+.auth-bottom-links {
+  margin-top: 1.25rem;
+  font-size: 0.82rem;
+  text-align: center;
+  color: rgba(255, 255, 255, 0.38);
+}
+.auth-bottom-links a {
+  color: #34d399;
+  font-weight: 600;
+  text-decoration: none;
+}
+.auth-bottom-links a:hover { text-decoration: underline; }
+
+/* ============================================================
+   RESPONSIVE — TABLET (769px–1024px)
+   Make card a bit narrower with smaller padding
+   ============================================================ */
+@media (max-width: 1024px) {
+  .auth-wrapper { padding: 1rem; }
+  .auth-form-panel { padding: 2rem 2.25rem; }
+  .auth-split-card { max-height: none; }
+}
+
+/* ============================================================
+   RESPONSIVE — MOBILE (≤ 700px)
+   Full-screen: image banner on top, form below with internal scroll
+   ============================================================ */
+@media (max-width: 700px) {
+  html, body { overflow: hidden; }
+
+  .auth-wrapper {
+    padding: 0;
+    align-items: stretch;
+  }
+
+  .auth-split-card {
+    flex-direction: column;
+    border-radius: 0;
+    max-width: 100%;
+    max-height: 100vh;
+    height: 100vh;
+    box-shadow: none;
+    animation: none;
+  }
+
+  /* Image: compact top banner */
+  .auth-image-panel {
+    flex: 0 0 180px;
+  }
+
+  .auth-image-panel h1 {
+    bottom: 1.25rem;
+    left: 1.5rem;
+    font-size: 1.5rem;
+  }
+  .auth-image-panel h1 small { font-size: 0.72rem; }
+
+  /* Form: fills remaining height, scrolls internally */
+  .auth-form-panel {
+    flex: 1;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    border-left: none;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    padding: 1.5rem 1.25rem 2rem;
+    justify-content: flex-start;
+  }
+
+  /* Stack password fields on mobile */
+  .form-row {
+    grid-template-columns: 1fr;
+    gap: 0.85rem;
+  }
+
+  /* GitHub button expands to full row on mobile */
+  .btn-social.icon-only {
+    flex: 1;
+  }
+
+  .floating-back-btn {
+    top: 1rem;
+    left: 1rem;
+  }
+}
+
+/* ============================================================
+   VERY SMALL SCREENS (< 380px)
+   ============================================================ */
+@media (max-width: 380px) {
+  .auth-form-panel { padding: 1.25rem 1rem 2rem; }
+  .auth-image-panel { flex: 0 0 140px; }
+  .auth-form-panel h2 { font-size: 1.35rem; }
+}
