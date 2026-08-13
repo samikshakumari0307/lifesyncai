@@ -14,6 +14,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
   <script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.27/bundled/lenis.min.js"></script>
+  <link rel="stylesheet" href="../css/companion.css">
 </head>
 <body>
   <aside class="sidebar" id="sidebar">
@@ -32,7 +33,7 @@
       <a href="mood.html" class="nav-item">Mood Tracker</a>
       <a href="analytics.html" class="nav-item">Analytics</a>
       <a href="planner.html" class="nav-item">Daily Planner</a>
-      <a href="ai-coach.html" class="nav-item">AI Coach</a>
+      
     </nav>
     </aside>
 
@@ -109,7 +110,10 @@
           <input type="text" id="session-subject" class="form-control" placeholder="e.g. Mathematics" required>
         </div>
         <div class="form-group">
-          <label class="form-label" for="session-topic">Topic to Cover</label>
+          <label class="form-label" for="session-topic" style="display: flex; justify-content: space-between; align-items: center;">
+            Topic to Cover
+            <button type="button" id="btn-suggest-topic" style="background: none; border: none; color: var(--text-secondary); font-size: 0.8rem; cursor: pointer; text-decoration: underline;">✨ Auto-Suggest</button>
+          </label>
           <input type="text" id="session-topic" class="form-control" placeholder="e.g. Calculus Chapter 3" required>
         </div>
         <div class="dashboard-grid">
@@ -135,8 +139,10 @@
   <script type="module" src="../js/dashboard.js"></script>
   <script type="module" src="../js/study.js"></script>
   <script type="module" src="../js/script.js"></script>
+  <script type="module" src="../js/companion.js"></script>
 </body>
 </html>
+
 
 
 

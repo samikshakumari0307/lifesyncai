@@ -12,48 +12,101 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
   <script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.27/bundled/lenis.min.js"></script>
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
   <style>
+    /* Neo-brutalist Stat Boxes */
     .stat-box {
-      padding: 2rem;
+      padding: 2.5rem 2rem;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
       text-align: center;
       gap: 1rem;
+      border: 3px solid #1a1a1a !important;
+      border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px !important;
+      box-shadow: 4px 4px 0px rgba(26,26,26,1) !important;
+      transition: all 0.2s;
+      color: #1a1a1a;
+      background-color: var(--stat-bg, #fff) !important;
     }
+    .stat-box:hover {
+      transform: translateY(-4px) rotate(0deg) !important;
+      box-shadow: 8px 8px 0px rgba(26,26,26,1) !important;
+    }
+    
+    .dashboard-grid > .stat-box:nth-child(1) { --stat-bg: #ffa07a; transform: rotate(-2deg); }
+    .dashboard-grid > .stat-box:nth-child(2) { --stat-bg: #fde047; transform: rotate(1deg); }
+    .dashboard-grid > .stat-box:nth-child(3) { --stat-bg: #93c5fd; transform: rotate(-1.5deg); }
+
     .stat-box h3 {
-      color: var(--text-secondary);
-      font-size: 1rem;
-      font-weight: 500;
+      color: #1a1a1a;
+      font-size: 1.1rem;
+      font-weight: 700;
+      font-family: var(--font-serif);
+      margin: 0;
     }
     .stat-box .value {
-      font-size: 3.5rem;
-      font-weight: 600;
+      font-size: 4rem;
+      font-weight: 900;
       letter-spacing: -0.04em;
+      line-height: 1;
+      text-shadow: 2px 2px 0px #fff;
+      color: #1a1a1a !important;
     }
     .stat-box .trend {
-      font-size: 0.9rem;
-      color: var(--accent-success);
+      font-size: 0.95rem;
+      font-weight: 600;
+      background: #1a1a1a;
+      color: #fff;
+      padding: 0.2rem 0.8rem;
+      border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px;
+      transform: rotate(2deg);
+      border: 2px solid #1a1a1a;
     }
+    
+    /* Neo-brutalist Progress Bars */
     .progress-row {
-      margin-top: 1rem;
+      margin-top: 1.5rem;
     }
     .progress-bar-container {
       width: 100%;
-      height: 12px;
-      background-color: var(--border-color);
-      border-radius: var(--radius-full);
+      height: 28px;
+      background-color: #fff;
+      border: 3px solid #1a1a1a;
+      border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px;
       overflow: hidden;
-      margin-top: 0.5rem;
+      margin-top: 0.8rem;
+      box-shadow: 3px 3px 0px #1a1a1a;
+      position: relative;
     }
     .progress-bar {
       height: 100%;
-      background-color: var(--accent-primary);
-      transition: width 1s ease;
+      background-color: var(--bar-color, #ffa07a) !important;
+      border-right: 3px solid #1a1a1a;
+      transition: width 1s cubic-bezier(0.25, 0.8, 0.25, 1);
     }
+    
+    /* Ensure the cards holding the progress bars also have the sketchy style */
+    .dashboard-grid > .col-span-6.card {
+      border: 3px solid #1a1a1a;
+      border-radius: 15px 255px 15px 225px / 255px 15px 225px 15px;
+      box-shadow: 4px 4px 0px #1a1a1a;
+      background: #fafafa;
+      color: #1a1a1a;
+    }
+    .dashboard-grid > .col-span-6.card h3 {
+      font-family: var(--font-serif);
+      font-weight: 700;
+      font-size: 1.4rem;
+      color: #1a1a1a;
+    }
+    #task-rate-bar { --bar-color: #ffa07a; }
+    #goal-rate-bar { --bar-color: #6ee7b7; } /* Pastel green */
   </style>
+  <link rel="stylesheet" href="../css/companion.css">
 </head>
 <body>
   <aside class="sidebar" id="sidebar">
@@ -72,7 +125,7 @@
       <a href="mood.html" class="nav-item">Mood Tracker</a>
       <a href="analytics.html" class="nav-item active">Analytics</a>
       <a href="planner.html" class="nav-item">Daily Planner</a>
-      <a href="ai-coach.html" class="nav-item">AI Coach</a>
+      
     </nav>
     </aside>
 
@@ -147,11 +200,32 @@
               <span>Overall Completion</span>
               <span id="goal-rate-text">0%</span>
             </div>
-            <div class="progress-bar-container">
-              <div class="progress-bar" id="goal-rate-bar" style="width: 0%; background: var(--accent-success);"></div>
             </div>
           </div>
         </div>
+
+        <!-- NEW CHARTS -->
+        <div class="col-span-12 card" style="padding: 2rem; margin-top: 1.5rem;">
+          <h3 style="margin-bottom: 1rem;">Mood Trend (Last 7 Days)</h3>
+          <div style="height: 300px; width: 100%;">
+            <canvas id="moodChart"></canvas>
+          </div>
+        </div>
+
+        <div class="col-span-6 card" style="padding: 2rem; margin-top: 1.5rem;">
+          <h3 style="margin-bottom: 1rem;">Task Priorities</h3>
+          <div style="height: 250px; width: 100%; display: flex; justify-content: center;">
+            <canvas id="taskChart"></canvas>
+          </div>
+        </div>
+
+        <div class="col-span-6 card" style="padding: 2rem; margin-top: 1.5rem;">
+          <h3 style="margin-bottom: 1rem;">Study Hours by Subject</h3>
+          <div style="height: 250px; width: 100%;">
+            <canvas id="studyChart"></canvas>
+          </div>
+        </div>
+
       </div>
     </div>
   </main>
@@ -160,8 +234,10 @@
   <script type="module" src="../js/dashboard.js"></script>
   <script type="module" src="../js/analytics.js"></script>
   <script type="module" src="../js/script.js"></script>
+  <script type="module" src="../js/companion.js"></script>
 </body>
 </html>
+
 
 
 

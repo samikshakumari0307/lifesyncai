@@ -135,6 +135,57 @@ function renderSession(session, id) {
   });
 }
 
+// AI Topic Suggestion
+const btnSuggest = document.getElementById('btn-suggest-topic');
+const subjectInput = document.getElementById('session-subject');
+const topicInput = document.getElementById('session-topic');
+
+btnSuggest.addEventListener('click', async () => {
+  const subject = subjectInput.value.trim();
+  
+  if (!subject) {
+    alert("Please enter a Subject first so I know what to suggest!");
+    subjectInput.focus();
+    return;
+  }
+  
+  try {
+    btnSuggest.textContent = "✨ Thinking...";
+    btnSuggest.disabled = true;
+    
+    const prompt = `You are an AI study assistant. The user wants to study "${subject}". Suggest a highly specific, actionable, and common topic for them to study. Return ONLY the topic name, nothing else. Do not use quotes or formatting. Example: If subject is "Class 10th Maths", return "Trigonometry Basics".`;
+    
+    const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent`, {
+      method: 'POST',
+      headers: { 
+        'Content-Type': 'application/json',
+        'x-goog-api-key': 'YOUR_GEMINI_API_KEY'
+      },
+      body: JSON.stringify({
+        contents: [{ role: "user", parts: [{ text: prompt }] }]
+      })
+    });
+    
+    const data = await response.json();
+    
+    if (data.candidates && data.candidates[0].content) {
+      let suggestion = data.candidates[0].content.parts[0].text.trim();
+      // Clean up quotes if AI accidentally adds them
+      suggestion = suggestion.replace(/^["']|["']$/g, '');
+      topicInput.value = suggestion;
+    } else {
+      alert("Oops, my AI brain couldn't think of a topic. Try again!");
+    }
+    
+  } catch (err) {
+    console.error("AI Suggestion error:", err);
+    alert("Failed to get suggestion. Check connection.");
+  } finally {
+    btnSuggest.textContent = "✨ Auto-Suggest";
+    btnSuggest.disabled = false;
+  }
+});
+
 // Handle Form Submit
 const sessionForm = document.getElementById('session-form');
 sessionForm.addEventListener('submit', async (e) => {
@@ -173,3 +224,4 @@ sessionForm.addEventListener('submit', async (e) => {
 });
 
 init();
+

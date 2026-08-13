@@ -17,51 +17,97 @@
     .mood-grid {
       display: grid;
       grid-template-columns: repeat(5, 1fr);
-      gap: 1rem;
-      margin-bottom: 2rem;
+      gap: 1.5rem;
+      margin-bottom: 2.5rem;
     }
+    
+    /* Neo-brutalist Mood Buttons */
     .mood-btn {
-      background: var(--bg-tertiary);
-      border: 1px solid var(--border-color);
-      border-radius: var(--radius-lg);
-      padding: 1.5rem;
-      font-size: 2rem;
+      background: #fff;
+      border: 3px solid #1a1a1a;
+      border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px;
+      padding: 1.5rem 1rem;
       cursor: pointer;
-      transition: all 0.2s ease;
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 0.5rem;
-    }
-    .mood-btn span {
-      font-size: 0.9rem;
-      color: var(--text-secondary);
-    }
-    .mood-btn:hover, .mood-btn.selected {
-      border-color: var(--accent-primary);
-      background: var(--grid-color);
+      gap: 1rem;
+      box-shadow: 4px 4px 0px var(--mood-color, #1a1a1a);
+      transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+      position: relative;
     }
     
+    .mood-btn:nth-child(1) { --mood-color: #ffa07a; }
+    .mood-btn:nth-child(2) { --mood-color: #fde047; }
+    .mood-btn:nth-child(3) { --mood-color: #6ee7b7; }
+    .mood-btn:nth-child(4) { --mood-color: #93c5fd; }
+    .mood-btn:nth-child(5) { --mood-color: #6ee7b7; }
+
+    .mood-btn:hover, .mood-btn.selected {
+      transform: translateY(-5px) rotate(-2deg);
+      box-shadow: 8px 8px 0px var(--mood-color);
+      background: #fafafa;
+    }
+    
+    /* High-quality "Sticker" Emojis */
+    .mood-emoji {
+      font-size: 3.5rem;
+      line-height: 1;
+      filter: drop-shadow(2px 2px 0px #1a1a1a);
+      transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    
+    .mood-btn:hover .mood-emoji, .mood-btn.selected .mood-emoji {
+      transform: scale(1.2) rotate(5deg);
+    }
+
+    .mood-btn span {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #1a1a1a;
+      font-family: var(--font-serif);
+    }
+    
+    /* Sketchy Log Cards */
     .log-card {
       padding: 1.5rem;
       display: flex;
       gap: 1.5rem;
       align-items: flex-start;
+      border: 3px solid #1a1a1a !important;
+      border-radius: 15px 255px 15px 225px / 255px 15px 225px 15px !important;
+      box-shadow: 4px 4px 0px #1a1a1a !important;
+      margin-bottom: 1.5rem;
+      background-color: #fff;
     }
+    
     .log-emoji {
-      font-size: 2.5rem;
-      background: var(--bg-tertiary);
-      width: 60px;
-      height: 60px;
+      font-size: 3rem;
+      width: 80px;
+      height: 80px;
       display: flex;
       align-items: center;
       justify-content: center;
+      background: #fff;
+      border: 3px solid #1a1a1a;
       border-radius: 50%;
+      box-shadow: 3px 3px 0px #1a1a1a;
+      filter: drop-shadow(1px 1px 0px #1a1a1a);
     }
+    
     .log-details {
       flex: 1;
     }
+    
+    .log-details h3 {
+      font-family: var(--font-serif);
+      font-weight: 700;
+      font-size: 1.2rem !important;
+      color: #1a1a1a;
+      margin: 0;
+    }
   </style>
+  <link rel="stylesheet" href="../css/companion.css">
 </head>
 <body>
   <aside class="sidebar" id="sidebar">
@@ -80,7 +126,7 @@
       <a href="mood.html" class="nav-item active">Mood Tracker</a>
       <a href="analytics.html" class="nav-item">Analytics</a>
       <a href="planner.html" class="nav-item">Daily Planner</a>
-      <a href="ai-coach.html" class="nav-item">AI Coach</a>
+      
     </nav>
     </aside>
 
@@ -120,19 +166,19 @@
           
           <div class="mood-grid" id="mood-selector">
             <button type="button" class="mood-btn" data-value="1" data-emoji="😢">
-              😢 <span>Terrible</span>
+              <div class="mood-emoji">😢</div> <span>Terrible</span>
             </button>
             <button type="button" class="mood-btn" data-value="2" data-emoji="😟">
-              😟 <span>Bad</span>
+              <div class="mood-emoji">😟</div> <span>Bad</span>
             </button>
             <button type="button" class="mood-btn" data-value="3" data-emoji="😐">
-              😐 <span>Okay</span>
+              <div class="mood-emoji">😐</div> <span>Okay</span>
             </button>
             <button type="button" class="mood-btn" data-value="4" data-emoji="🙂">
-              🙂 <span>Good</span>
+              <div class="mood-emoji">🙂</div> <span>Good</span>
             </button>
             <button type="button" class="mood-btn" data-value="5" data-emoji="😁">
-              😁 <span>Great</span>
+              <div class="mood-emoji">😁</div> <span>Great</span>
             </button>
           </div>
 
@@ -163,8 +209,10 @@
   <script type="module" src="../js/dashboard.js"></script>
   <script type="module" src="../js/mood.js"></script>
   <script type="module" src="../js/script.js"></script>
+  <script type="module" src="../js/companion.js"></script>
 </body>
 </html>
+
 
 
 

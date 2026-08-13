@@ -126,16 +126,16 @@ body {
 }
 
 /* 1. Tasks/Study: Peach */
-.stat-card:nth-child(2) { background: #ffcdbd; }
+.stat-card:nth-child(2) { background: #ffa07a; }
 
 /* 2. Focus: Light Gray */
-.stat-card:nth-child(3) { background: #e4e9f1; }
+.stat-card:nth-child(3) { background: #6ee7b7; }
 
 /* 3. Habits: Pale Yellow */
-.stat-card:nth-child(4) { background: #feee83; }
+.stat-card:nth-child(4) { background: #fde047; }
 
 /* 4. Score/Coach: Light Blue */
-.stat-card:nth-child(5) { background: #c3d9fb; }
+.stat-card:nth-child(5) { background: #93c5fd; }
 
 .stat-card .stat-title {
   color: rgba(0, 0, 0, 0.6);

@@ -11,7 +11,7 @@
   --text-secondary: #475569;
   --text-tertiary: #94A3B8;
   
-  --accent-primary: #ffcdbd; /* Peach Sidebar Default */
+  --accent-primary: #ffa07a; /* Peach Sidebar Default */
   --accent-hover: #e84e46; /* Coral Hover */
   --accent-success: #10B981;
   --accent-warning: #F59E0B;
@@ -22,7 +22,7 @@
   --glass-bg: rgba(255, 255, 255, 0.9);
   --glass-border: rgba(0, 0, 0, 0.05);
   
-  --font-main: 'Inter', sans-serif;
+  --font-main: 'Plus Jakarta Sans', sans-serif;
   --radius-sm: 8px;
   --radius-md: 12px;
   --radius-lg: 16px;
@@ -158,3 +158,4 @@ ul {
 @media (max-width: 768px) {
   .col-span-3, .col-span-6 { grid-column: span 12; }
 }
+

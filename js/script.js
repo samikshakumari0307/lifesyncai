@@ -2,7 +2,57 @@
 import './firebase.js';
 
 document.addEventListener('DOMContentLoaded', () => {
-  // Theme toggle removed
+  // Navbar scroll effect
+  const navbar = document.getElementById('navbar');
+  if (navbar) {
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 50) {
+        navbar.classList.add('scrolled');
+      } else {
+        navbar.classList.remove('scrolled');
+      }
+    });
+  }
+
+  // Dynamic Text Rotation (Typing Effect)
+  const dynamicWord = document.getElementById('dynamic-word');
+  if (dynamicWord) {
+    const words = ["achieve", "succeed", "focus", "grow", "excel"];
+    let currentWordIndex = 0;
+    let isDeleting = false;
+    let currentText = '';
+    let typingSpeed = 150;
+
+    function type() {
+      const fullWord = words[currentWordIndex];
+
+      if (isDeleting) {
+        currentText = fullWord.substring(0, currentText.length - 1);
+        typingSpeed = 50; // Erase faster
+      } else {
+        currentText = fullWord.substring(0, currentText.length + 1);
+        typingSpeed = 150; // Type slower
+      }
+
+      dynamicWord.innerText = currentText;
+
+      // Logic for changing state
+      if (!isDeleting && currentText === fullWord) {
+        // Pause at the end of the word
+        typingSpeed = 2000;
+        isDeleting = true;
+      } else if (isDeleting && currentText === '') {
+        isDeleting = false;
+        currentWordIndex = (currentWordIndex + 1) % words.length;
+        typingSpeed = 500; // Pause before typing next word
+      }
+
+      setTimeout(type, typingSpeed);
+    }
+
+    // Start the typing effect
+    type();
+  }
 
   // 1. Initialize Lenis Smooth Scroll
   const lenis = new Lenis({
@@ -41,7 +91,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const hy = rect.top + rect.height / 2;
       const dx = e.clientX - hx;
       const dy = e.clientY - hy;
-      
+
       gsap.to(el, {
         x: dx * 0.2,
         y: dy * 0.2,
@@ -60,6 +110,39 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
+  // Premium 3D Tilt Micro-Animation for Cards
+  const tiltCards = document.querySelectorAll('.feature-card, .bento-item, .step-card');
+  tiltCards.forEach(card => {
+    card.addEventListener('mousemove', (e) => {
+      const rect = card.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+
+      const centerX = rect.width / 2;
+      const centerY = rect.height / 2;
+
+      const rotateX = ((y - centerY) / centerY) * -5; // Max rotation 5deg
+      const rotateY = ((x - centerX) / centerX) * 5;
+
+      gsap.to(card, {
+        rotateX: rotateX,
+        rotateY: rotateY,
+        transformPerspective: 1000,
+        ease: "power2.out",
+        duration: 0.5
+      });
+    });
+
+    card.addEventListener('mouseleave', () => {
+      gsap.to(card, {
+        rotateX: 0,
+        rotateY: 0,
+        ease: "power3.out",
+        duration: 0.8
+      });
+    });
+  });
+
   // 3. Split Text Animation for Hero
   const splitElements = document.querySelectorAll('.split-text');
   splitElements.forEach(el => {
@@ -72,7 +155,7 @@ document.addEventListener('DOMContentLoaded', () => {
   gsap.from(".overline", {
     y: 20, opacity: 0, duration: 1, delay: 0.2, ease: "power3.out"
   });
-  
+
   gsap.from(".split-text", {
     y: 40, opacity: 0, duration: 1.2, delay: 0.4, ease: "power4.out"
   });
@@ -101,6 +184,43 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
+  // 5. Parallax Scrolling Effects
+  // Make the background grid move slightly slower than the page
+  gsap.to("#interactive-grid", {
+    yPercent: 30,
+    ease: "none",
+    scrollTrigger: {
+      trigger: "#home",
+      start: "top top",
+      end: "bottom top",
+      scrub: true
+    }
+  });
+
+  // Make the hero abstract sphere move faster than the page (floating up)
+  gsap.to(".abstract-sphere", {
+    yPercent: -40,
+    ease: "none",
+    scrollTrigger: {
+      trigger: "#home",
+      start: "top top",
+      end: "bottom top",
+      scrub: true
+    }
+  });
+  
+  // Make the noise overlay shift slightly for texture depth
+  gsap.to(".noise-overlay", {
+    backgroundPosition: "0 100px",
+    ease: "none",
+    scrollTrigger: {
+      trigger: "body",
+      start: "top top",
+      end: "bottom bottom",
+      scrub: 1
+    }
+  });
+
   // Render Visuals
   renderAbstractSphere();
   createInteractiveGrid();
@@ -112,7 +232,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const amountElements = document.querySelectorAll('.amount');
 
   if (billingToggle) {
-    billingToggle.addEventListener('change', function() {
+    billingToggle.addEventListener('change', function () {
       if (this.checked) {
         labelAnnual.classList.add('active');
         labelMonthly.classList.remove('active');
@@ -132,7 +252,7 @@ function createInteractiveGrid() {
 
   const gridSize = 80;
   let cols, rows;
-  
+
   function drawGrid() {
     gridContainer.innerHTML = '';
     cols = Math.ceil(window.innerWidth / gridSize);
@@ -153,7 +273,7 @@ function createInteractiveGrid() {
   }
 
   drawGrid();
-  
+
   let resizeTimeout;
   window.addEventListener('resize', () => {
     clearTimeout(resizeTimeout);
@@ -165,11 +285,11 @@ function createInteractiveGrid() {
     const y = e.clientY;
     const col = Math.floor(x / gridSize);
     const row = Math.floor(y / gridSize);
-    
+
     if (col < cols && row < rows) {
       const index = row * cols + col;
       const cell = gridContainer.children[index];
-      
+
       if (cell && !cell.classList.contains('hovered')) {
         cell.classList.add('hovered');
         setTimeout(() => {
@@ -245,3 +365,4 @@ function renderAbstractSphere() {
     });
   });
 }
+

@@ -240,3 +240,4 @@ habitForm.addEventListener('submit', async (e) => {
 });
 
 init();
+

@@ -218,3 +218,4 @@ goalForm.addEventListener('submit', async (e) => {
 });
 
 init();
+

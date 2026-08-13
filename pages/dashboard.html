@@ -8,10 +8,12 @@
   <link rel="stylesheet" href="../css/components.css">
   <link rel="stylesheet" href="../css/dashboard.css">
   <link rel="stylesheet" href="../css/pages.css">
+  <link rel="stylesheet" href="../css/companion.css">
   
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
   <script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.27/bundled/lenis.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   
   <style>
     .dashboard-grid {
@@ -28,36 +30,76 @@
       .col-span-8, .col-span-4, .col-span-3 { grid-column: span 12; }
     }
 
+    /* Neo-brutalist Stat Cards */
     .stat-card {
       padding: 1.5rem;
       display: flex;
       flex-direction: column;
       gap: 0.5rem;
+      border: 3px solid #1a1a1a !important;
+      border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px !important;
+      box-shadow: 4px 4px 0px rgba(26,26,26,1) !important;
+      transition: all 0.2s;
+      background-color: var(--stat-bg, #fff) !important;
+      color: #1a1a1a;
     }
-    .stat-title {
-      color: var(--text-secondary);
-      font-size: 0.9rem;
-      font-weight: 500;
-    }
-    .stat-value {
-      font-size: 2.5rem;
-      font-weight: 600;
-      letter-spacing: -0.04em;
-    }
-    .greeting {
-      font-size: 2rem;
-      margin-bottom: 0.5rem;
+    .stat-card:hover {
+      transform: translateY(-4px) rotate(0deg) !important;
+      box-shadow: 8px 8px 0px rgba(26,26,26,1) !important;
     }
     
+    .dashboard-grid > .stat-card:nth-of-type(1) { --stat-bg: #ffa07a; transform: rotate(-2deg); }
+    .dashboard-grid > .stat-card:nth-of-type(2) { --stat-bg: #fde047; transform: rotate(1deg); }
+    .dashboard-grid > .stat-card:nth-of-type(3) { --stat-bg: #93c5fd; transform: rotate(-1deg); }
+    .dashboard-grid > .stat-card:nth-of-type(4) { --stat-bg: #6ee7b7; transform: rotate(2deg); }
+
+    .stat-title {
+      color: #1a1a1a;
+      font-size: 1.1rem;
+      font-weight: 700;
+      font-family: var(--font-serif);
+    }
+    .stat-value {
+      font-size: 3.5rem;
+      font-weight: 900;
+      letter-spacing: -0.04em;
+      line-height: 1;
+      text-shadow: 2px 2px 0px #fff;
+      color: #1a1a1a !important;
+    }
+    .greeting {
+      font-size: 2.5rem;
+      margin-bottom: 0.5rem;
+      font-family: var(--font-serif);
+      font-weight: 800;
+      color: #1a1a1a;
+    }
+    
+    /* Widget Cards (Neo-brutalist) */
+    .dashboard-grid > .card:not(.stat-card) {
+      border: 3px solid #1a1a1a;
+      border-radius: 15px 255px 15px 225px / 255px 15px 225px 15px;
+      box-shadow: 4px 4px 0px #1a1a1a;
+      background: #fafafa;
+    }
+
     .widget-header {
       display: flex;
       justify-content: space-between;
       margin-bottom: 1rem;
+      align-items: center;
+    }
+    .widget-header h3 {
+      font-family: var(--font-serif);
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: #1a1a1a;
+      margin: 0;
     }
     
     .mini-list-item {
       padding: 0.75rem 0;
-      border-bottom: 1px solid var(--border-color);
+      border-bottom: 2px solid rgba(26,26,26,0.1);
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -84,7 +126,7 @@
       <a href="mood.html" class="nav-item">Mood Tracker</a>
       <a href="analytics.html" class="nav-item">Analytics</a>
       <a href="planner.html" class="nav-item">Daily Planner</a>
-      <a href="ai-coach.html" class="nav-item">AI Coach</a>
+      
     </nav>
     </aside>
 
@@ -171,6 +213,26 @@
           <div id="widget-habits">Loading...</div>
         </div>
 
+        <!-- Charts Section -->
+        <div class="col-span-8 card" style="min-height: 300px;">
+          <div class="widget-header">
+            <h3>Focus Activity (Last 7 Days)</h3>
+            <a href="focus.html" style="font-size: 0.9rem; color: var(--accent-primary);">Start Focus</a>
+          </div>
+          <div style="position: relative; height: 250px; width: 100%;">
+            <canvas id="focusChart"></canvas>
+          </div>
+        </div>
+
+        <div class="col-span-4 card" style="min-height: 300px;">
+          <div class="widget-header">
+            <h3>Task Priority</h3>
+          </div>
+          <div style="position: relative; height: 250px; width: 100%; display: flex; justify-content: center;">
+            <canvas id="tasksChart"></canvas>
+          </div>
+        </div>
+
         <div class="col-span-12 card" style="min-height: 250px; margin-top: 0.5rem;">
           <div class="widget-header">
             <h3>Recent Notes</h3>
@@ -188,8 +250,10 @@
   <script type="module" src="../js/auth.js"></script>
   <script type="module" src="../js/dashboard.js"></script>
   <script type="module" src="../js/script.js"></script>
+  <script type="module" src="../js/companion.js"></script>
 </body>
 </html>
+
 
 
 

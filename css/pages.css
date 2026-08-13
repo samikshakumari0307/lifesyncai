@@ -352,25 +352,50 @@ span.flatpickr-weekday {
 }
 
 .list-item {
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 1rem 1.2rem;
-  border-radius: var(--radius-md);
+  padding: 1.2rem 1.2rem;
+  padding-right: 3rem; /* Extra space for the arrow point */
+  margin-bottom: 1.2rem; /* Space for drop shadow */
+  background-color: transparent;
   border: none;
-  transition: transform 0.2s;
+  border-radius: 0;
+  transition: transform 0.2s cubic-bezier(0.25, 0.8, 0.25, 1);
   color: #1a1a1a;
+  z-index: 1; /* Establish stacking context */
+  /* 2px Black outline (via multiple drop-shadows) + Offset color shadow */
+  filter: drop-shadow(2px 0 0 #1a1a1a) 
+          drop-shadow(0 2px 0 #1a1a1a) 
+          drop-shadow(-2px 0 0 #1a1a1a) 
+          drop-shadow(0 -2px 0 #1a1a1a) 
+          drop-shadow(6px 6px 0 var(--shadow-color, #ffa07a));
+}
+
+/* The solid white arrow background */
+.list-item::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-color: #ffffff;
+  clip-path: polygon(0% 0%, calc(100% - 25px) 0%, 100% 50%, calc(100% - 25px) 100%, 0% 100%);
+  z-index: -1;
 }
 
 /* Cycle through the 4 exact theme colors for list items */
-.list-item:nth-child(4n+1) { background-color: #ffcdbd; } /* Peach */
-.list-item:nth-child(4n+2) { background-color: #e4e9f1; } /* Slate Gray */
-.list-item:nth-child(4n+3) { background-color: #feee83; } /* Pale Yellow */
-.list-item:nth-child(4n+4) { background-color: #c3d9fb; } /* Light Blue */
+.list-item:nth-child(4n+1) { --shadow-color: #ffa07a; } /* Peach */
+.list-item:nth-child(4n+2) { --shadow-color: #6ee7b7; } /* Slate Gray */
+.list-item:nth-child(4n+3) { --shadow-color: #fde047; } /* Pale Yellow */
+.list-item:nth-child(4n+4) { --shadow-color: #93c5fd; } /* Light Blue */
 
 .list-item:hover {
-  transform: translateX(4px);
-  box-shadow: var(--shadow-md);
+  transform: translate(-2px, -2px);
+  filter: drop-shadow(2px 0 0 #1a1a1a) 
+          drop-shadow(0 2px 0 #1a1a1a) 
+          drop-shadow(-2px 0 0 #1a1a1a) 
+          drop-shadow(0 -2px 0 #1a1a1a) 
+          drop-shadow(8px 8px 0 var(--shadow-color, #ffa07a));
 }
 
 .item-left {
@@ -443,3 +468,96 @@ span.flatpickr-weekday {
 .empty-state p {
   font-size: 1.1rem;
 }
+
+/* --- Habit Cards (Doodle Quote Box Style) --- */
+.habit-card {
+  position: relative;
+  border: 3px solid #1a1a1a;
+  /* Sketchy hand-drawn border radius */
+  border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px;
+  padding: 2rem 1.5rem;
+  box-shadow: 4px 4px 0px rgba(26, 26, 26, 1);
+  transition: transform 0.2s, box-shadow 0.2s;
+  overflow: visible !important; /* To allow quotes to protrude */
+  color: #1a1a1a;
+  background-color: var(--card-bg, #fef08a);
+  margin-top: 1.5rem; /* Space for top quote */
+  margin-bottom: 2rem; /* Space for bottom quote */
+}
+
+.habit-card:nth-child(4n+1) { --card-bg: #ffa07a; } /* Peach */
+.habit-card:nth-child(4n+2) { --card-bg: #93c5fd; } /* Light Blue */
+.habit-card:nth-child(4n+3) { --card-bg: #6ee7b7; } /* Slate Gray */
+.habit-card:nth-child(4n+4) { --card-bg: #fde047; } /* Pale Yellow */
+
+.habit-card:hover {
+  transform: translateY(-4px) rotate(-1deg);
+  box-shadow: 8px 8px 0px rgba(26, 26, 26, 1);
+}
+
+/* Giant Protruding Quotes */
+.habit-card::before, .habit-card::after {
+  position: absolute;
+  font-family: Georgia, serif;
+  font-size: 6rem;
+  font-weight: 900;
+  line-height: 1;
+  color: #1a1a1a;
+  z-index: 10;
+}
+
+.habit-card::before {
+  content: '“';
+  top: -45px;
+  left: -20px;
+}
+
+.habit-card::after {
+  content: '”';
+  bottom: -65px; 
+  right: -20px;
+}
+
+.habit-header {
+  position: relative;
+  z-index: 2;
+}
+
+.habit-title {
+  font-size: 1.4rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.habit-streak {
+  font-size: 1.1rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+  color: #1a1a1a;
+}
+
+.habit-actions .btn-check-habit {
+  border: 2px solid #1a1a1a;
+  border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px; /* Sketchy button */
+  background: #fff;
+  color: #1a1a1a;
+  font-weight: 700;
+  box-shadow: 2px 2px 0px #1a1a1a;
+  transition: all 0.2s;
+  width: 100%;
+}
+
+.habit-actions .btn-check-habit:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 4px 4px 0px #1a1a1a;
+}
+
+.habit-actions .btn-check-habit.btn-secondary {
+  background: #1a1a1a;
+  color: #fff;
+  box-shadow: none;
+}
+

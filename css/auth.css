@@ -16,7 +16,7 @@ body {
   justify-content: center;
   /* The full sunset image as background */
   background: url('../assets/auth-bg.jpg') center / cover no-repeat;
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
   -webkit-font-smoothing: antialiased;
 }
 

@@ -163,3 +163,4 @@ noteForm.addEventListener('submit', async (e) => {
 });
 
 init();
+

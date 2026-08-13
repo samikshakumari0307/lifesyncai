@@ -9,6 +9,7 @@ const settingsForm = document.getElementById('settings-form');
 const nameInput = document.getElementById('settings-name');
 const emailInput = document.getElementById('settings-email');
 const githubInput = document.getElementById('settings-github');
+const geminiInput = document.getElementById('settings-gemini');
 
 // Theme Color Logic
 const colorChips = document.querySelectorAll('.color-chip');
@@ -43,6 +44,9 @@ async function init() {
       if (data.githubUsername) {
         githubInput.value = data.githubUsername;
       }
+      if (data.geminiApiKey) {
+        geminiInput.value = data.geminiApiKey;
+      }
       
       // Load saved theme color
       if (data.themeColor) {
@@ -59,7 +63,7 @@ async function init() {
         });
       } else {
         // Default to peach chip active
-        document.querySelector('.color-chip[data-color="#ffcdbd"]')?.classList.add('active');
+        document.querySelector('.color-chip[data-color="#ffa07a"]')?.classList.add('active');
       }
     }
     
@@ -74,6 +78,7 @@ settingsForm.addEventListener('submit', async (e) => {
   const btn = document.getElementById('btn-save-settings');
   const newName = nameInput.value.trim();
   let githubUsername = githubInput.value.trim();
+  const geminiApiKey = geminiInput.value.trim();
   
   // If the user pasted a full URL, extract just the username
   if (githubUsername.includes('github.com/')) {
@@ -99,6 +104,7 @@ settingsForm.addEventListener('submit', async (e) => {
       uid: currentUser.uid,
       name: newName,
       githubUsername: githubUsername,
+      geminiApiKey: geminiApiKey,
       themeColor: selectedThemeColor
     }, { merge: true });
     
@@ -120,3 +126,4 @@ settingsForm.addEventListener('submit', async (e) => {
 });
 
 init();
+

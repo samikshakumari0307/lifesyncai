@@ -83,9 +83,16 @@ function setupRealtimeListeners() {
   onSnapshot(tasksQ, (snapshot) => {
     let completedToday = 0;
     let importantTasks = [];
+    let priorityCounts = { High: 0, Medium: 0, Low: 0 };
     
     snapshot.forEach(docSnap => {
       const t = docSnap.data();
+      
+      if (!t.completed) {
+        if (t.priority in priorityCounts) {
+          priorityCounts[t.priority]++;
+        }
+      }
       if (t.completed) {
         if (t.dueDate === todayStr) completedToday++;
       } else {
@@ -108,6 +115,8 @@ function setupRealtimeListeners() {
           <span class="badge ${t.priority === 'High' ? 'badge-high' : 'badge-medium'}">${t.priority}</span>
         </div>
       `).join('');
+      
+    updateTasksChart(priorityCounts);
   });
 
   // 2. Listen to Habits
@@ -143,14 +152,35 @@ function setupRealtimeListeners() {
   const focusQ = query(collection(db, "users", currentUser.uid, "focusSessions"));
   onSnapshot(focusQ, (snapshot) => {
     let totalFocusMins = 0;
+    
+    // For chart
+    const last7Days = Array.from({length: 7}, (_, i) => {
+      const d = new Date();
+      d.setDate(d.getDate() - i);
+      return d.toISOString().split('T')[0];
+    }).reverse();
+    const focusByDate = {};
+    last7Days.forEach(d => focusByDate[d] = 0);
+
     snapshot.forEach(docSnap => {
       const f = docSnap.data();
+      if (!f.completedAt) return;
+      
       const fDate = new Date(f.completedAt);
+      if (isNaN(fDate.getTime())) return;
+      
+      const dateStr = fDate.toISOString().split('T')[0];
+      
       if (fDate >= startOfDay) {
         totalFocusMins += f.duration;
       }
+      
+      if (focusByDate[dateStr] !== undefined) {
+        focusByDate[dateStr] += f.duration;
+      }
     });
     statFocus.textContent = `${totalFocusMins}m`;
+    updateFocusChart(last7Days, Object.values(focusByDate));
   });
 
   // 4. Listen to Notes (Recent 3)
@@ -222,3 +252,131 @@ function setupRealtimeListeners() {
     });
   }
 }
+
+// Chart Instances
+let focusChartInstance = null;
+let tasksChartInstance = null;
+
+function getChartColors() {
+  const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+  return {
+    text: isDark ? '#e5e7eb' : '#4b5563',
+    grid: isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)',
+    primary: isDark ? '#60a5fa' : '#2563eb', // Blue
+    primaryAlpha: isDark ? 'rgba(96, 165, 250, 0.2)' : 'rgba(37, 99, 235, 0.2)',
+    high: '#ef4444', // Red
+    medium: '#f59e0b', // Yellow
+    low: '#10b981'  // Green
+  };
+}
+
+function updateFocusChart(labels, data) {
+  const ctx = document.getElementById('focusChart');
+  if (!ctx) return;
+  
+  if (focusChartInstance) {
+    focusChartInstance.data.labels = labels;
+    focusChartInstance.data.datasets[0].data = data;
+    focusChartInstance.update();
+    return;
+  }
+  
+  Chart.defaults.font.family = "'Inter', sans-serif";
+  
+  focusChartInstance = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: labels,
+      datasets: [{
+        label: 'Focus Minutes',
+        data: data,
+        borderColor: '#1a1a1a',
+        backgroundColor: '#93c5fd', // Pastel blue
+        borderWidth: 4,
+        tension: 0.4,
+        fill: true,
+        pointBackgroundColor: '#fde047', // Yellow points
+        pointBorderColor: '#1a1a1a',
+        pointBorderWidth: 3,
+        pointRadius: 6,
+        pointHoverRadius: 8
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          callbacks: {
+            label: (ctx) => `${ctx.raw} mins`
+          }
+        }
+      },
+      scales: {
+        y: {
+          beginAtZero: true,
+          grid: { color: 'transparent' }, // No grid lines
+          ticks: { color: '#1a1a1a', font: { weight: 'bold' } }
+        },
+        x: {
+          grid: { display: false },
+          ticks: {
+            color: '#1a1a1a',
+            font: { weight: 'bold' },
+            callback: function(val, index) {
+              const dateStr = this.getLabelForValue(val);
+              return new Date(dateStr).toLocaleDateString('en-US', { weekday: 'short' });
+            }
+          }
+        }
+      }
+    }
+  });
+}
+
+function updateTasksChart(counts) {
+  const ctx = document.getElementById('tasksChart');
+  if (!ctx) return;
+  
+  const data = [counts.High, counts.Medium, counts.Low];
+  
+  if (data.every(val => val === 0)) {
+    data[0] = 0.1;
+  }
+  
+  if (tasksChartInstance) {
+    tasksChartInstance.data.datasets[0].data = data;
+    tasksChartInstance.update();
+    return;
+  }
+  
+  tasksChartInstance = new Chart(ctx, {
+    type: 'doughnut',
+    data: {
+      labels: ['High', 'Medium', 'Low'],
+      datasets: [{
+        data: data,
+        backgroundColor: ['#ffa07a', '#fde047', '#93c5fd'],
+        borderColor: '#1a1a1a',
+        borderWidth: 3,
+        hoverOffset: 10
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      cutout: '60%',
+      plugins: {
+        legend: {
+          position: 'bottom',
+          labels: {
+            color: '#1a1a1a',
+            font: { weight: 'bold' }
+          }
+        }
+      }
+    }
+  });
+}
+

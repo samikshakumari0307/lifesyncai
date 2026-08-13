@@ -137,3 +137,4 @@ moodForm.addEventListener('submit', async (e) => {
 });
 
 init();
+
