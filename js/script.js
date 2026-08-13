@@ -4,15 +4,29 @@ import './firebase.js';
 document.addEventListener('DOMContentLoaded', () => {
   // Navbar scroll effect
   const navbar = document.getElementById('navbar');
-  if (navbar) {
-    window.addEventListener('scroll', () => {
+  const topbar = document.querySelector('.topbar');
+  let lastScrollY = window.scrollY;
+
+  window.addEventListener('scroll', () => {
+    // Landing page navbar
+    if (navbar) {
       if (window.scrollY > 50) {
         navbar.classList.add('scrolled');
       } else {
         navbar.classList.remove('scrolled');
       }
-    });
-  }
+    }
+
+    // Dashboard smart header
+    if (topbar) {
+      if (window.scrollY > 80 && window.scrollY > lastScrollY) {
+        topbar.classList.add('topbar--hidden');
+      } else {
+        topbar.classList.remove('topbar--hidden');
+      }
+      lastScrollY = window.scrollY;
+    }
+  });
 
   // Dynamic Text Rotation (Typing Effect)
   const dynamicWord = document.getElementById('dynamic-word');
